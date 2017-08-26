@@ -6,12 +6,19 @@ namespace FF.Data.Models
 {
     public partial class Review : UpdateableModel
     {
-        private const double Gravity = 1.8;
-
         public Review(IDateTimeService dateTimeService)
             : base(dateTimeService)
         {
             Votes = new List<Vote>();
+        }
+
+        public double CalculateFreshnessScore(int votes)
+        {
+            //HN decay algorithm http://osmy.in/1Wk14xk
+            var daysSinceReview = (base.DateTimeService.UtcNow() - UpdatedWhen).Days;
+            var numerator = (double)(votes - 1); //minus their own vote
+            var denominator = Math.Pow((double)(daysSinceReview + 2.0), Gravity);
+            return numerator / denominator;
         }
 
         public int ReviewId { get; set; }
@@ -31,13 +38,8 @@ namespace FF.Data.Models
         public virtual User User { get; set; }
         public virtual ICollection<Vote> Votes { get; set; }
 
-        public double CalculateFreshnessScore(int votes)
-        {
-            //HN decay algorithm http://osmy.in/1Wk14xk
-            var daysSinceReview = (base.DateTimeService.UtcNow() - UpdatedWhen).Days;
-            var numerator = (double)(votes  -1); //minus their own vote
-            var denominator = Math.Pow((double) (daysSinceReview + 2.0), Gravity);
-            return numerator/denominator;
-        }
+
+        private const double Gravity = 1.8;
+
     }
 }

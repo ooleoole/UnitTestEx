@@ -8,6 +8,11 @@ namespace FF.Contracts.Service
 {
     public interface ISecurityService
     {
-        string CurrentUser { get; set; }
+        string CurrentUser();
+
+        string UserIpAddress();
+
+        int CurrentUserId();
+
     }
 }

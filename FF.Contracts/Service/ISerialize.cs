@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FF.UnitTests
+namespace FF.Contracts.Service
 {
-   public class LocationServiceTests
+    public interface ISerialize
     {
-       
+        object ReadObject(Stream stream);
     }
 }
